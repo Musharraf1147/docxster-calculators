@@ -1,7 +1,8 @@
 import { cn } from '@/lib/utils'
 
 const TAGS = {
-  margin:     'bg-tag-margin-bg text-tag-margin-fg border-tag-margin-stroke',
+  risk:       'bg-tag-risk-bg text-tag-risk-fg border-tag-risk-stroke',
+  error:      'bg-tag-error-bg text-tag-error-fg border-tag-error-stroke',
   labor:      'bg-tag-labor-bg text-tag-labor-fg border-tag-labor-stroke',
   disputes:   'bg-tag-disputes-bg text-tag-disputes-fg border-tag-disputes-stroke',
   compliance: 'bg-tag-disputes-bg text-tag-disputes-fg border-tag-disputes-stroke',

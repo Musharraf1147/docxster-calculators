@@ -19,7 +19,8 @@ export const colors = {
     strong: '#7C737E',
   },
   tag: {
-    margin:    { bg: '#FEF2F2', fg: '#B91C1C' },
+    risk:      { bg: '#FEF2F2', fg: '#B91C1C' },
+    error:     { bg: '#FEF2F2', fg: '#B91C1C' },
     labor:     { bg: '#F0FDF4', fg: '#15803D' },
     disputes:  { bg: '#FFFBEB', fg: '#B45309' },
     cashflow:  { bg: '#EFF6FF', fg: '#1D4ED8' },

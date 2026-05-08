@@ -49,12 +49,12 @@ function OperationsView({ results, inputs }) {
           value={formatCurrency(results.chaseSaved)}
         />
         <BreakdownCard
-          tag="disputes"
+          tag="error"
           label="Cross-doc validation catches"
           value={formatCurrency(results.validateSaved)}
         />
         <BreakdownCard
-          tag="disputes"
+          tag="error"
           label="HS classification correction avoided"
           value={formatCurrency(results.hsSaved)}
         />
@@ -87,12 +87,12 @@ function ComplianceView({ results }) {
 
       <BreakdownGrid>
         <BreakdownCard
-          tag="margin"
+          tag="risk"
           label="ISF violations — CBP penalty exposure"
           value={formatCurrency(results.isfAnnual)}
         />
         <BreakdownCard
-          tag="margin"
+          tag="risk"
           label="HS misclassification duty liability"
           value={formatCurrency(results.dutyAnnual)}
         />

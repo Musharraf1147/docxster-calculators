@@ -28,9 +28,12 @@
   --color-stroke-strong: #7C737E;
 
   /* ── Colors: Tags ───────────────────────────────── */
-  --color-tag-margin-bg:       #FEF2F2;
-  --color-tag-margin-fg:       #ED5656;
-  --color-tag-margin-stroke:   #FACDCD;
+  --color-tag-risk-bg:         #FEF2F2;
+  --color-tag-risk-fg:         #ED5656;
+  --color-tag-risk-stroke:     #FACDCD;
+  --color-tag-error-bg:        #FEF2F2;
+  --color-tag-error-fg:        #ED5656;
+  --color-tag-error-stroke:    #FACDCD;
   --color-tag-labor-bg:        #EBFAEF;
   --color-tag-labor-fg:        #15803D;
   --color-tag-labor-stroke:    #C2EFCE;
