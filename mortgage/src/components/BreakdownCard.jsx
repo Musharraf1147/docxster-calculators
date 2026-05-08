@@ -5,7 +5,7 @@ const TAGS = {
   labor:      'bg-tag-labor-bg text-tag-labor-fg border-tag-labor-stroke',
   suspensions: 'bg-tag-margin-bg text-tag-margin-fg border-tag-margin-stroke',
   cashflow:   'bg-tag-cashflow-bg text-tag-cashflow-fg border-tag-cashflow-stroke',
-  compliance: 'bg-tag-cashflow-bg text-tag-cashflow-fg border-tag-cashflow-stroke',
+  compliance: 'bg-tag-disputes-bg text-tag-disputes-fg border-tag-disputes-stroke',
 }
 
 export default function BreakdownCard({ tag, label, value, footnote }) {
