@@ -97,12 +97,12 @@ function ComplianceView({ results }) {
           value={formatCurrency(results.dutyAnnual)}
         />
         <BreakdownCard
-          tag="cashflow"
+          tag="compliance"
           label="CF-28 response burden (monthly)"
           value={formatCurrency(results.cf28Monthly)}
         />
         <BreakdownCard
-          tag="cashflow"
+          tag="compliance"
           label="Annual risk reduced by Docxster"
           value={formatCurrency(results.riskReduced)}
         />

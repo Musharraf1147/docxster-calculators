@@ -82,17 +82,15 @@ export default function ConfigPanel({ inputs, onChange }) {
       </Section>
 
       <Section title="Error & compliance exposure">
-        <TabGroup
+        <Slider
           label="Entry error rate"
           helper="CBP audit data — default 8–12%"
           value={inputs.errRate}
+          min={0}
+          max={0.25}
+          step={0.01}
           onChange={set('errRate')}
-          options={[
-            { value: 0.05, label: '5%' },
-            { value: 0.10, label: '10%' },
-            { value: 0.15, label: '15%' },
-            { value: 0.20, label: '20%' },
-          ]}
+          formatValue={(v) => `${Math.round(v * 100)}%`}
         />
         <Slider
           label="Avg. cost to remediate one error"
@@ -112,9 +110,10 @@ export default function ConfigPanel({ inputs, onChange }) {
           value={inputs.hsRate}
           onChange={set('hsRate')}
           options={[
-            { value: 0.01, label: '1%' },
             { value: 0.02, label: '2%' },
-            { value: 0.05, label: '5%' },
+            { value: 0.04, label: '4%' },
+            { value: 0.06, label: '6%' },
+            { value: 0.08, label: '8%' },
             { value: 0.10, label: '10%' },
           ]}
         />
@@ -145,9 +144,10 @@ export default function ConfigPanel({ inputs, onChange }) {
           value={inputs.isfRate}
           onChange={set('isfRate')}
           options={[
-            { value: 0.01, label: '1%' },
             { value: 0.02, label: '2%' },
-            { value: 0.05, label: '5%' },
+            { value: 0.04, label: '4%' },
+            { value: 0.06, label: '6%' },
+            { value: 0.08, label: '8%' },
             { value: 0.10, label: '10%' },
           ]}
         />
