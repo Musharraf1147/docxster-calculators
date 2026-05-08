@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+
+@import "@fontsource/source-code-pro/500.css";
+@import "@fontsource/source-code-pro/600.css";
+
+@theme {
+  /* ── Colors: Background ─────────────────────────── */
+  --color-bg-page:    #F5F5F5;
+  --color-bg-primary: #FFFFFF;
+  --color-bg-subtle:  #E8E8E8;
+
+  /* ── Colors: Text ───────────────────────────────── */
+  --color-text-strong: #3F3F3F;
+  --color-text-weak:   #6F6F6F;
+  --color-text-weaker: #A3A3A3;
+
+  /* ── Colors: Icon ───────────────────────────────── */
+  --color-icon-strong: #3F3F3F;
+  --color-icon-weak:   #6F6F6F;
+  --color-icon-weaker: #A3A3A3;
+
+  /* ── Colors: Stroke ─────────────────────────────── */
+  --color-stroke-weak:   #DAD7D7;
+  --color-stroke-strong: #7C737E;
+
+  /* ── Colors: Tags ───────────────────────────────── */
+  --color-tag-margin-bg:       #FEF2F2;
+  --color-tag-margin-fg:       #ED5656;
+  --color-tag-margin-stroke:   #FACDCD;
+  --color-tag-labor-bg:        #EBFAEF;
+  --color-tag-labor-fg:        #15803D;
+  --color-tag-labor-stroke:    #C2EFCE;
+  --color-tag-disputes-bg:     #FFF6EB;
+  --color-tag-disputes-fg:     #FA9E33;
+  --color-tag-disputes-stroke: #FEE2C2;
+  --color-tag-cashflow-bg:     #F5F5F5;
+  --color-tag-cashflow-fg:     #6F6F6F;
+  --color-tag-cashflow-stroke: #DAD7D7;
+
+  /* ── Shadows ────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.12);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.16);
+  --shadow-md: 0 1.75px 3.5px rgba(0,0,0,0.16);
+  --shadow-lg: 0 3px 3px rgba(0,0,0,0.08), 0 7px 4px rgba(0,0,0,0.04), 0 12px 5px rgba(0,0,0,0.02);
+
+  /* ── Border Radius ──────────────────────────────── */
+  --radius-sm:  4px;
+  --radius-md:  6px;
+  --radius-lg:  8px;
+  --radius-xl:  10px;
+  --radius-2xl: 12px;
+
+  /* ── Spacing ────────────────────────────────────── */
+  --spacing-2xs: 2px;
+  --spacing-xs:  4px;
+  --spacing-sm:  6px;
+  --spacing-md:  8px;
+  --spacing-lg:  12px;
+  --spacing-xl:  16px;
+  --spacing-2xl: 24px;
+
+  /* ── Fonts ──────────────────────────────────────── */
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-mono: "Source Code Pro", monospace;
+
+  /* ── Easing ─────────────────────────────────────── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Tabular numerics on by default ─────────────────── */
+body {
+  font-feature-settings: "tnum";
+}
+
+/* ── Mono font is always uppercase ─────────────────── */
+.font-mono {
+  text-transform: uppercase;
+}
+
+/* ── Dashed section dividers ────────────────────────── */
+.section-dashed-divider > * + * {
+  position: relative;
+}
+.section-dashed-divider > * + *::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-stroke-weak) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+/* ── Gradient button utilities ──────────────────────── */
+.bg-primary-btn {
+  background: linear-gradient(0deg, #3F3F3F 0%, #1E1E1E 100%);
+}
+.bg-primary-btn-hover {
+  background: linear-gradient(0deg, #2F2F2F 0%, #0E0E0E 100%);
+}
+
