@@ -112,6 +112,7 @@ export default function ConfigPanel({ inputs, onChange }) {
             { value: 0.40, label: '40%' },
             { value: 0.50, label: '50%' },
             { value: 0.60, label: '60%' },
+            { value: 0.80, label: '80%' },
           ]}
         />
         <Slider
@@ -136,6 +137,7 @@ export default function ConfigPanel({ inputs, onChange }) {
             { value: 0.30, label: '30%' },
             { value: 0.40, label: '40%' },
             { value: 0.50, label: '50%' },
+            { value: 0.60, label: '60%' },
           ]}
         />
         <TabGroup
@@ -148,6 +150,8 @@ export default function ConfigPanel({ inputs, onChange }) {
             { value: 0.10, label: '10%' },
             { value: 0.15, label: '15%' },
             { value: 0.20, label: '20%' },
+            { value: 0.25, label: '25%' },
+            { value: 0.30, label: '30%' },
           ]}
         />
         <Slider

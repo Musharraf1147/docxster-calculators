@@ -60,7 +60,7 @@ function OperationsView({ results, inputs }) {
           value={formatCurrency(results.incVerifySaved)}
         />
         <BreakdownCard
-          tag="disputes"
+          tag="suspensions"
           label="Underwriting rework avoided (70% reduction)"
           value={formatCurrency(results.suspensionSaved)}
         />

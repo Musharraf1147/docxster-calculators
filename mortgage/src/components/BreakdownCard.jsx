@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 const TAGS = {
   margin:     'bg-tag-margin-bg text-tag-margin-fg border-tag-margin-stroke',
   labor:      'bg-tag-labor-bg text-tag-labor-fg border-tag-labor-stroke',
-  disputes:   'bg-tag-disputes-bg text-tag-disputes-fg border-tag-disputes-stroke',
+  suspensions: 'bg-tag-margin-bg text-tag-margin-fg border-tag-margin-stroke',
   cashflow:   'bg-tag-cashflow-bg text-tag-cashflow-fg border-tag-cashflow-stroke',
   compliance: 'bg-tag-cashflow-bg text-tag-cashflow-fg border-tag-cashflow-stroke',
 }
