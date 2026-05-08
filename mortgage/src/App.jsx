@@ -32,6 +32,10 @@ export default function App() {
         </div>
       </section>
 
+      <footer className="max-w-[1320px] mx-auto px-2xl py-xl text-xs text-text-weaker">
+        Document automation for mortgage lenders
+      </footer>
+
       <AnimatePresence>
         {toastVisible && (
           <motion.div

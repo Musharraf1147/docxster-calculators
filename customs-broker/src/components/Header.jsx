@@ -10,7 +10,7 @@ export default function Header({ onReset }) {
           className="h-8 w-auto"
         />
         <span className="text-sm text-text-weak">
-          ROI Calculator for Freight Brokers
+          ROI Calculator — Licensed Customs Brokers
         </span>
         <button
           type="button"

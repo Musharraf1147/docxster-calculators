@@ -1,92 +1,90 @@
 export const DEFAULTS = {
-  loads:              500,
-  invoiceValue:       1800,
-  billingVolume:      50000,
-  overbillRate:       0.10,
-  overchargeAmount:   120,
-  manuallyCaughtRate: 0.20,
-  docsPerLoad:        4,
-  docTimeMinutes:     18,
-  opsStaffFTEs:       5,
-  hourlyRate:         28,
-  podLagDays:         3,
-  disputeRate:        0.10,
-  disputeHours:       3.5,
-  subscriptionCost:   1500,
+  loans: 100,
+  loanamt: 350000,
+  dip: 35,
+  dayssaved: 2,
+  noterate: 0.07,
+  ftes: 5,
+  rate: 30,
+  hrsperloan: 16,
+  docchase: 0.40,
+  followups: 6,
+  incverify: 0.30,
+  susprate: 0.10,
+  reworkhrs: 4.5,
+  complhrs: 1.5,
+  cost: 1500,
 }
 
 export function calculateROI(inputs) {
   const {
-    loads,
-    billingVolume,
-    overbillRate,
-    overchargeAmount,
-    manuallyCaughtRate,
-    docTimeMinutes,
-    hourlyRate,
-    disputeRate,
-    disputeHours,
-    podLagDays,
-    subscriptionCost,
+    loans, loanamt, dayssaved, noterate, ftes, rate, hrsperloan,
+    docchase, incverify, susprate, reworkhrs, complhrs, cost,
   } = inputs
 
-  const overbilledLoads    = loads * overbillRate
-  const totalOverbilling   = overbilledLoads * overchargeAmount
-  const currentlyCaught    = totalOverbilling * manuallyCaughtRate
-  const overbillRecovered  = totalOverbilling - currentlyCaught
+  const AUTO_SAVE = 0.65
+  const SUSP_REDUCTION = 0.70
+  const COMPL_AUTO = 0.60
 
-  const docLaborSaved      = (loads * docTimeMinutes / 60) * 0.65 * hourlyRate
-  const disputeTimeSaved   = loads * disputeRate * disputeHours * hourlyRate * 0.70
-  const totalLaborSaved    = docLaborSaved + disputeTimeSaved
+  const teamMonthlyCost = ftes * 160 * rate
 
-  const cashFlowFreed      = (billingVolume / 30) * podLagDays
-  const podOpportunityCost = cashFlowFreed * 0.06
+  const docChaseSavedRaw   = loans * hrsperloan * docchase * AUTO_SAVE * rate
+  const incVerifySavedRaw  = loans * hrsperloan * incverify * AUTO_SAVE * rate
+  const suspensionSavedRaw = loans * susprate * reworkhrs * SUSP_REDUCTION * rate
+  const complianceSavedRaw = loans * complhrs * COMPL_AUTO * rate
 
-  const monthlyROI         = overbillRecovered + totalLaborSaved
-  const annualNet          = (monthlyROI * 12) - (subscriptionCost * 12)
+  const totalRaw = docChaseSavedRaw + incVerifySavedRaw +
+                   suspensionSavedRaw + complianceSavedRaw
+  const capRatio = (teamMonthlyCost > 0 && totalRaw > teamMonthlyCost)
+    ? teamMonthlyCost / totalRaw
+    : 1
 
-  const paybackWeeks =
-    monthlyROI === 0 || subscriptionCost === 0
-      ? null
-      : Math.round((subscriptionCost / monthlyROI) * 4.33)
+  const docChaseSaved   = docChaseSavedRaw * capRatio
+  const incVerifySaved  = incVerifySavedRaw * capRatio
+  const suspensionSaved = suspensionSavedRaw * capRatio
+  const complianceSaved = complianceSavedRaw * capRatio
 
-  const roiMultiplier =
-    monthlyROI === 0 || subscriptionCost === 0
-      ? null
-      : monthlyROI / subscriptionCost
+  const laborTotal   = docChaseSaved + incVerifySaved
+  const monthlyTotal = laborTotal + suspensionSaved + complianceSaved
+  const annualNet    = (monthlyTotal * 12) - (cost * 12)
 
-  const hoursReturned =
-    (loads * docTimeMinutes / 60 * 0.65) +
-    (loads * disputeRate * disputeHours * 0.70)
+  const hrsFreed = Math.min(
+    loans * hrsperloan * (docchase + incverify) * AUTO_SAVE,
+    ftes * 160
+  )
+
+  const carryCost = loans * loanamt * (noterate / 365) * dayssaved
+  const carryAnnual = carryCost * 12
+
+  const currentCPL = loans > 0
+    ? (loans * hrsperloan * rate + loans * susprate * reworkhrs * rate) / loans
+    : 0
+  const savingPerLoan = loans > 0
+    ? (laborTotal + suspensionSaved + complianceSaved) / loans
+    : 0
+  const afterCPL = Math.max(0, currentCPL - savingPerLoan)
+
+  const paybackWeeks = (monthlyTotal > 0 && cost > 0)
+    ? Math.round((cost / monthlyTotal) * 4.33)
+    : null
+  const roiMultiplier = cost > 0 ? monthlyTotal / cost : null
 
   return {
-    overbilledLoads,
-    totalOverbilling,
-    currentlyCaught,
-    overbillRecovered,
-    docLaborSaved,
-    disputeTimeSaved,
-    totalLaborSaved,
-    cashFlowFreed,
-    podOpportunityCost,
-    monthlyROI,
-    annualNet,
-    paybackWeeks,
-    roiMultiplier,
-    hoursReturned,
+    docChaseSaved, incVerifySaved, suspensionSaved, complianceSaved,
+    laborTotal, monthlyTotal, annualNet,
+    hrsFreed, carryCost, carryAnnual,
+    currentCPL, afterCPL, savingPerLoan,
+    paybackWeeks, roiMultiplier,
+    dayssaved,
   }
 }
 
 export function formatCurrency(n) {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000)     return `$${(n / 1_000).toFixed(0)}K`
-  return `$${Math.round(n).toLocaleString()}`
+  if (n >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M'
+  if (n >= 1000) return '$' + Math.round(n / 1000) + 'K'
+  return '$' + Math.round(n).toLocaleString()
 }
 
 export function formatHours(n) {
-  return `${Math.round(n)} hrs/mo`
-}
-
-export function formatPercent(n) {
-  return `${Math.round(n * 100)}%`
+  return Math.round(n).toLocaleString() + ' hrs'
 }

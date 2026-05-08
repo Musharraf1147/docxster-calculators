@@ -1,6 +1,5 @@
 import Slider from './Slider'
 import TabGroup from './TabGroup'
-import { formatCurrency } from '@/lib/calculations'
 
 function Section({ title, children }) {
   return (
@@ -18,164 +17,150 @@ export default function ConfigPanel({ inputs, onChange }) {
 
   return (
     <div className="flex flex-col section-dashed-divider">
-      <Section title="Your operations">
+      <Section title="Volume & team">
         <Slider
-          label="Monthly load volume"
-          helper="Number of shipments booked each month"
-          value={inputs.loads}
+          label="Monthly entry volume"
+          value={inputs.entries}
           min={0}
           max={5000}
-          step={25}
-          onChange={set('loads')}
+          step={50}
+          onChange={set('entries')}
           formatValue={(v) => v.toLocaleString()}
         />
         <Slider
-          label="Average shipper invoice"
-          helper="What you typically bill your shipper per load"
-          value={inputs.invoiceValue}
+          label="Avg. docs per entry"
+          helper="CI, packing list, ISF, arrival notice, 3461/7501"
+          value={inputs.docs}
           min={0}
-          max={10000}
-          step={100}
-          onChange={set('invoiceValue')}
-          formatValue={(v) => `$${v.toLocaleString()}`}
-        />
-        <Slider
-          label="Monthly billing volume"
-          helper="Total dollars you invoice shippers each month"
-          value={inputs.billingVolume}
-          min={0}
-          max={5000000}
-          step={50000}
-          onChange={set('billingVolume')}
-          formatValue={formatCurrency}
-        />
-      </Section>
-
-      <Section title="Carrier overbilling">
-        <TabGroup
-          label="How often carriers overbill"
-          helper="Industry studies show 5–15% of carrier invoices contain errors"
-          value={inputs.overbillRate}
-          onChange={set('overbillRate')}
-          options={[
-            { value: 0.05, label: '5%' },
-            { value: 0.10, label: '10%' },
-            { value: 0.15, label: '15%' },
-            { value: 0.20, label: '20%' },
-            { value: 0.25, label: '25%' },
-          ]}
-        />
-        <Slider
-          label="Average overcharge per error"
-          helper="Accessorials, weight discrepancies, fuel surcharge mistakes"
-          value={inputs.overchargeAmount}
-          min={0}
-          max={500}
-          step={10}
-          onChange={set('overchargeAmount')}
-          formatValue={(v) => `$${v.toLocaleString()}`}
-        />
-        <TabGroup
-          label="What you currently catch manually"
-          helper="Most teams catch under 20% without automation"
-          value={inputs.manuallyCaughtRate}
-          onChange={set('manuallyCaughtRate')}
-          options={[
-            { value: 0,    label: '0%' },
-            { value: 0.10, label: '10%' },
-            { value: 0.20, label: '20%' },
-            { value: 0.30, label: '30%' },
-            { value: 0.50, label: '50%' },
-            { value: 1.00, label: '100%' },
-          ]}
-        />
-      </Section>
-
-      <Section title="Document processing labor">
-        <Slider
-          label="Documents per load"
-          helper="Rate confirmation, BOL, POD, carrier invoice, accessorials, etc."
-          value={inputs.docsPerLoad}
-          min={0}
-          max={8}
+          max={9}
           step={1}
-          onChange={set('docsPerLoad')}
+          onChange={set('docs')}
         />
         <Slider
-          label="Time spent on docs per load"
-          helper="Manual matching of rate con, BOL, POD, and carrier invoice"
-          value={inputs.docTimeMinutes}
-          min={0}
-          max={60}
-          step={1}
-          onChange={set('docTimeMinutes')}
-          formatValue={(v) => `${v} min`}
-        />
-        <Slider
-          label="Ops staff FTEs on doc processing"
-          helper="Headcount dedicated to document handling"
-          value={inputs.opsStaffFTEs}
+          label="Entry staff FTEs"
+          value={inputs.ftes}
           min={0}
           max={50}
           step={1}
-          onChange={set('opsStaffFTEs')}
+          onChange={set('ftes')}
         />
         <Slider
-          label="Fully-loaded hourly cost"
-          helper="Salary + benefits + overhead, per ops team hour"
-          value={inputs.hourlyRate}
+          label="Fully-loaded hourly rate"
+          value={inputs.rate}
           min={0}
           max={65}
           step={1}
-          onChange={set('hourlyRate')}
+          onChange={set('rate')}
           formatValue={(v) => `$${v}`}
         />
       </Section>
 
-      <Section title="POD collection and disputes">
+      <Section title="Time benchmarks">
         <Slider
-          label="POD collection lag"
-          helper="Days between delivery and confirmed POD receipt"
-          value={inputs.podLagDays}
+          label="Time per entry — manual"
+          helper="Source: GSA — avg. 50 min (range 45–60)"
+          value={inputs.timeMin}
           min={0}
-          max={14}
-          step={1}
-          onChange={set('podLagDays')}
-          formatValue={(v) => `${v} ${v === 1 ? 'day' : 'days'}`}
+          max={90}
+          step={5}
+          onChange={set('timeMin')}
+          formatValue={(v) => `${v} min`}
         />
         <TabGroup
-          label="Dispute rate"
-          helper="Loads that end in a billing dispute"
-          value={inputs.disputeRate}
-          onChange={set('disputeRate')}
+          label="% time chasing missing data"
+          helper="Broker ops estimate — importer/shipper follow-ups"
+          value={inputs.chasePct}
+          onChange={set('chasePct')}
+          options={[
+            { value: 0.10, label: '10%' },
+            { value: 0.20, label: '20%' },
+            { value: 0.25, label: '25%' },
+            { value: 0.30, label: '30%' },
+            { value: 0.50, label: '50%' },
+          ]}
+        />
+      </Section>
+
+      <Section title="Error & compliance exposure">
+        <TabGroup
+          label="Entry error rate"
+          helper="CBP audit data — default 8–12%"
+          value={inputs.errRate}
+          onChange={set('errRate')}
           options={[
             { value: 0.05, label: '5%' },
             { value: 0.10, label: '10%' },
             { value: 0.15, label: '15%' },
             { value: 0.20, label: '20%' },
-            { value: 0.25, label: '25%' },
-            { value: 0.30, label: '30%' },
           ]}
         />
         <Slider
-          label="Hours to resolve one dispute"
-          helper="Back-and-forth with carrier, TMS updates, documentation"
-          value={inputs.disputeHours}
+          label="Avg. cost to remediate one error"
+          helper="3 hrs staff time + broker admin + CF-28 response"
+          value={inputs.remediate}
           min={0}
-          max={12}
-          step={0.5}
-          onChange={set('disputeHours')}
+          max={1000}
+          step={50}
+          onChange={set('remediate')}
+          formatValue={(v) => `$${v.toLocaleString()}`}
+        />
+      </Section>
+
+      <Section title="HS classification exposure">
+        <TabGroup
+          label="HS classification error rate"
+          value={inputs.hsRate}
+          onChange={set('hsRate')}
+          options={[
+            { value: 0.01, label: '1%' },
+            { value: 0.02, label: '2%' },
+            { value: 0.05, label: '5%' },
+            { value: 0.10, label: '10%' },
+          ]}
+        />
+        <Slider
+          label="Avg. duty delta per HS error"
+          value={inputs.hsDelta}
+          min={0}
+          max={2000}
+          step={50}
+          onChange={set('hsDelta')}
+          formatValue={(v) => `$${v.toLocaleString()}`}
+        />
+      </Section>
+
+      <Section title="ISF exposure">
+        <Slider
+          label="Monthly ocean entries — ISF"
+          value={inputs.ocean}
+          min={0}
+          max={2000}
+          step={25}
+          onChange={set('ocean')}
+          formatValue={(v) => v.toLocaleString()}
+        />
+        <TabGroup
+          label="ISF error rate"
+          helper="CBP penalty: up to $5,000/violation — 19 CFR § 113.63"
+          value={inputs.isfRate}
+          onChange={set('isfRate')}
+          options={[
+            { value: 0.01, label: '1%' },
+            { value: 0.02, label: '2%' },
+            { value: 0.05, label: '5%' },
+            { value: 0.10, label: '10%' },
+          ]}
         />
       </Section>
 
       <Section title="Docxster cost">
         <Slider
-          label="Monthly subscription"
-          value={inputs.subscriptionCost}
+          label="Monthly Docxster subscription"
+          value={inputs.cost}
           min={0}
           max={10000}
           step={250}
-          onChange={set('subscriptionCost')}
+          onChange={set('cost')}
           formatValue={(v) => `$${v.toLocaleString()}`}
         />
       </Section>

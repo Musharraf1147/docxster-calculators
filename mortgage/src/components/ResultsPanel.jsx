@@ -5,7 +5,7 @@ import MetricCard from './MetricCard'
 import BreakdownCard from './BreakdownCard'
 import SummaryFooter from './SummaryFooter'
 import AssumptionsDisclosure from './AssumptionsDisclosure'
-import { formatCurrency } from '@/lib/calculations'
+import { formatCurrency, formatHours } from '@/lib/calculations'
 
 function HeroRow({ children }) {
   return <div className="grid grid-cols-3 gap-lg">{children}</div>
@@ -15,98 +15,116 @@ function BreakdownGrid({ children }) {
   return <div className="grid grid-cols-2 gap-lg">{children}</div>
 }
 
-function OperationsView({ results, inputs }) {
-  const netImpact = results.monthlyROI - inputs.subscriptionCost
+function HighlightPanel({ label, value }) {
+  return (
+    <div className="bg-bg-page border border-stroke-weak rounded-2xl p-xl flex flex-col gap-sm">
+      <span className="text-xs font-medium text-text-weaker">{label}</span>
+      <span className="text-xl font-semibold tracking-[-0.4px] tabular-nums text-text-strong">
+        {value}
+      </span>
+    </div>
+  )
+}
 
+function OperationsView({ results, inputs }) {
   return (
     <>
       <HeroRow>
         <MetricCard
-          label="Margin you're losing today"
-          value={formatCurrency(results.overbillRecovered)}
-          caption="Monthly carrier overbilling that slips through"
+          label="Monthly processing labor saved"
+          value={formatCurrency(results.laborTotal)}
+          caption="doc chase + income verification"
         />
         <MetricCard
-          label="Monthly labor savings"
-          value={formatCurrency(results.totalLaborSaved)}
-          caption="Document handling + dispute labor saved"
+          label="Monthly suspension rework avoided"
+          value={formatCurrency(results.suspensionSaved)}
+          caption="UW kickbacks eliminated"
         />
         <MetricCard
           emphasized
-          label="Net monthly impact"
-          value={formatCurrency(netImpact)}
-          caption="After Docxster subscription"
+          label="Monthly total ROI"
+          value={formatCurrency(results.monthlyTotal)}
+          caption={`vs. $${inputs.cost.toLocaleString()} subscription`}
         />
       </HeroRow>
 
       <BreakdownGrid>
         <BreakdownCard
-          tag="margin"
-          label="Overbilling Docxster catches that you currently miss"
-          value={formatCurrency(results.overbillRecovered)}
+          tag="labor"
+          label="Document collection & chase time eliminated"
+          value={formatCurrency(results.docChaseSaved)}
         />
         <BreakdownCard
           tag="labor"
-          label="Time saved on doc matching"
-          value={formatCurrency(results.docLaborSaved)}
+          label="Income & employment verification automated"
+          value={formatCurrency(results.incVerifySaved)}
         />
         <BreakdownCard
           tag="disputes"
-          label="Time saved on dispute resolution"
-          value={formatCurrency(results.disputeTimeSaved)}
+          label="Underwriting rework avoided (70% reduction)"
+          value={formatCurrency(results.suspensionSaved)}
         />
         <BreakdownCard
-          tag="cashflow"
-          label="Cash freed up by faster POD collection"
-          value={formatCurrency(results.cashFlowFreed)}
+          tag="compliance"
+          label="TRID / RESPA / HMDA review time saved"
+          value={formatCurrency(results.complianceSaved)}
         />
       </BreakdownGrid>
+
+      <HighlightPanel
+        label="Processor capacity unlocked — hours recovered per month that can be redeployed to new loan volume without adding headcount."
+        value={`${formatHours(results.hrsFreed)} / month`}
+      />
     </>
   )
 }
 
-function FinanceView({ results }) {
+function CFOView({ results }) {
+  const annualLabor = (results.laborTotal + results.suspensionSaved + results.complianceSaved) * 12
+
   return (
     <>
       <HeroRow>
         <MetricCard
-          label="Annual leakage you'd recover"
-          value={formatCurrency(results.totalOverbilling * 12)}
+          label="Monthly carry cost reduction"
+          value={formatCurrency(results.carryCost)}
+          caption={`from ${results.dayssaved} ${results.dayssaved === 1 ? 'day' : 'days'} saved per loan`}
         />
         <MetricCard
-          label="Working capital tied up in POD"
-          value={formatCurrency(results.cashFlowFreed)}
+          label="Annual processing labor saved"
+          value={formatCurrency(annualLabor)}
+          caption="processor + UW rework combined"
         />
         <MetricCard
           emphasized
-          label="Net annual ROI"
+          label="Annual net ROI"
           value={formatCurrency(results.annualNet)}
-          caption="After Docxster subscription"
+          caption="after subscription cost"
         />
       </HeroRow>
 
-      <BreakdownGrid>
-        <BreakdownCard
-          tag="margin"
-          label="Overbilling recovered per year"
-          value={formatCurrency(results.overbillRecovered * 12)}
+      <div className="grid grid-cols-3 gap-lg">
+        <MetricCard
+          label="Current cost per loan (processing)"
+          value={formatCurrency(results.currentCPL)}
+          caption="before Docxster"
         />
-        <BreakdownCard
-          tag="cashflow"
-          label="Annual opportunity cost of POD lag"
-          value={formatCurrency(results.podOpportunityCost * 12)}
+        <MetricCard
+          label="Cost per loan with Docxster"
+          value={formatCurrency(results.afterCPL)}
+          caption="after automation savings"
         />
-        <BreakdownCard
-          tag="disputes"
-          label="Annual dispute overhead eliminated"
-          value={formatCurrency(results.disputeTimeSaved * 12)}
+        <MetricCard
+          label="Saving per loan closed"
+          value={formatCurrency(results.savingPerLoan)}
+          caption="margin recaptured per file"
         />
-        <BreakdownCard
-          tag="labor"
-          label="Annual document labor recovered"
-          value={formatCurrency(results.docLaborSaved * 12)}
-        />
-      </BreakdownGrid>
+      </div>
+
+      <HighlightPanel
+        label="Annual carry cost reduction — faster file assembly and verification shaves days off time-to-close across the full pipeline."
+        value={`${formatCurrency(results.carryAnnual)} / yr`}
+      />
     </>
   )
 }
@@ -128,14 +146,14 @@ export default function ResultsPanel({ results, inputs }) {
         onChange={setView}
         options={[
           { value: 'operations', label: 'Operations view' },
-          { value: 'finance', label: 'Finance view' },
+          { value: 'cfo', label: 'CFO / COO view' },
         ]}
       />
 
       {view === 'operations' ? (
         <OperationsView results={results} inputs={inputs} />
       ) : (
-        <FinanceView results={results} />
+        <CFOView results={results} />
       )}
 
       <SummaryFooter

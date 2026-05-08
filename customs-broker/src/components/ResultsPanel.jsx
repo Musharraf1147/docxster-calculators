@@ -16,95 +16,95 @@ function BreakdownGrid({ children }) {
 }
 
 function OperationsView({ results, inputs }) {
-  const netImpact = results.monthlyROI - inputs.subscriptionCost
-
   return (
     <>
       <HeroRow>
         <MetricCard
-          label="Margin you're losing today"
-          value={formatCurrency(results.overbillRecovered)}
-          caption="Monthly carrier overbilling that slips through"
+          label="Monthly labor savings"
+          value={formatCurrency(results.laborTotal)}
+          caption="recovered staff time"
         />
         <MetricCard
-          label="Monthly labor savings"
-          value={formatCurrency(results.totalLaborSaved)}
-          caption="Document handling + dispute labor saved"
+          label="Monthly error cost avoided"
+          value={formatCurrency(results.errorTotal)}
+          caption="validation + HS classification"
         />
         <MetricCard
           emphasized
-          label="Net monthly impact"
-          value={formatCurrency(netImpact)}
-          caption="After Docxster subscription"
+          label="Monthly total ROI"
+          value={formatCurrency(results.monthlyROI)}
+          caption={`vs. $${inputs.cost.toLocaleString()} subscription`}
         />
       </HeroRow>
 
       <BreakdownGrid>
         <BreakdownCard
-          tag="margin"
-          label="Overbilling Docxster catches that you currently miss"
-          value={formatCurrency(results.overbillRecovered)}
+          tag="labor"
+          label="Extraction + re-keying elimination"
+          value={formatCurrency(results.extractSaved)}
         />
         <BreakdownCard
           tag="labor"
-          label="Time saved on doc matching"
-          value={formatCurrency(results.docLaborSaved)}
+          label="Missing data chase time eliminated"
+          value={formatCurrency(results.chaseSaved)}
         />
         <BreakdownCard
           tag="disputes"
-          label="Time saved on dispute resolution"
-          value={formatCurrency(results.disputeTimeSaved)}
+          label="Cross-doc validation catches"
+          value={formatCurrency(results.validateSaved)}
         />
         <BreakdownCard
-          tag="cashflow"
-          label="Cash freed up by faster POD collection"
-          value={formatCurrency(results.cashFlowFreed)}
+          tag="disputes"
+          label="HS classification correction avoided"
+          value={formatCurrency(results.hsSaved)}
         />
       </BreakdownGrid>
     </>
   )
 }
 
-function FinanceView({ results }) {
+function ComplianceView({ results }) {
   return (
     <>
       <HeroRow>
         <MetricCard
-          label="Annual leakage you'd recover"
-          value={formatCurrency(results.totalOverbilling * 12)}
+          label="Annual ISF penalty exposure"
+          value={formatCurrency(results.isfAnnual)}
+          caption="at current error rate"
         />
         <MetricCard
-          label="Working capital tied up in POD"
-          value={formatCurrency(results.cashFlowFreed)}
+          label="Annual duty underpayment risk"
+          value={formatCurrency(results.dutyAnnual)}
+          caption="HS error × duty delta"
         />
         <MetricCard
           emphasized
-          label="Net annual ROI"
-          value={formatCurrency(results.annualNet)}
-          caption="After Docxster subscription"
+          label="Annual total risk exposure"
+          value={formatCurrency(results.riskTotal)}
+          caption="before Docxster"
         />
       </HeroRow>
 
       <BreakdownGrid>
         <BreakdownCard
           tag="margin"
-          label="Overbilling recovered per year"
-          value={formatCurrency(results.overbillRecovered * 12)}
+          label="ISF violations — CBP penalty exposure"
+          value={formatCurrency(results.isfAnnual)}
+        />
+        <BreakdownCard
+          tag="margin"
+          label="HS misclassification duty liability"
+          value={formatCurrency(results.dutyAnnual)}
         />
         <BreakdownCard
           tag="cashflow"
-          label="Annual opportunity cost of POD lag"
-          value={formatCurrency(results.podOpportunityCost * 12)}
+          label="CF-28 response burden (monthly)"
+          value={formatCurrency(results.cf28Monthly)}
         />
         <BreakdownCard
-          tag="disputes"
-          label="Annual dispute overhead eliminated"
-          value={formatCurrency(results.disputeTimeSaved * 12)}
-        />
-        <BreakdownCard
-          tag="labor"
-          label="Annual document labor recovered"
-          value={formatCurrency(results.docLaborSaved * 12)}
+          tag="cashflow"
+          label="Annual risk reduced by Docxster"
+          value={formatCurrency(results.riskReduced)}
         />
       </BreakdownGrid>
     </>
@@ -127,15 +127,15 @@ export default function ResultsPanel({ results, inputs }) {
         value={view}
         onChange={setView}
         options={[
-          { value: 'operations', label: 'Operations view' },
-          { value: 'finance', label: 'Finance view' },
+          { value: 'operations', label: 'Operational view' },
+          { value: 'compliance', label: 'Compliance / risk view' },
         ]}
       />
 
       {view === 'operations' ? (
         <OperationsView results={results} inputs={inputs} />
       ) : (
-        <FinanceView results={results} />
+        <ComplianceView results={results} />
       )}
 
       <SummaryFooter

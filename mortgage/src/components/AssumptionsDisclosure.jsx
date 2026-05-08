@@ -19,10 +19,12 @@ export default function AssumptionsDisclosure() {
         <span>Assumptions used in this calculation</span>
       </summary>
       <ul className="mt-md flex flex-col gap-xs text-xs text-text-weaker list-disc pl-lg">
-        <li>Docxster catches 65% of document handling time</li>
-        <li>Docxster reduces dispute resolution time by 70%</li>
-        <li>POD lag opportunity cost is calculated at 6% annualized</li>
-        <li>Calculations assume current operations and rates remain constant</li>
+        <li>Processor time savings modeled at 65% automation of doc chase and income verification tasks</li>
+        <li>Underwriting suspension reduction 70% with pre-validated files</li>
+        <li>Compliance review automation 60%</li>
+        <li>Labor savings capped at total team cost (FTEs × 160 hrs × rate) — you cannot save more than your team costs</li>
+        <li>Carry cost = loan amount × note rate / 365 × days saved × loan volume</li>
+        <li>All sliders go to zero</li>
       </ul>
     </details>
   )

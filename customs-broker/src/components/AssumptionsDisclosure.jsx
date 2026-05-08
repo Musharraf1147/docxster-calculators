@@ -19,10 +19,13 @@ export default function AssumptionsDisclosure() {
         <span>Assumptions used in this calculation</span>
       </summary>
       <ul className="mt-md flex flex-col gap-xs text-xs text-text-weaker list-disc pl-lg">
-        <li>Docxster catches 65% of document handling time</li>
-        <li>Docxster reduces dispute resolution time by 70%</li>
-        <li>POD lag opportunity cost is calculated at 6% annualized</li>
-        <li>Calculations assume current operations and rates remain constant</li>
+        <li>Entry error rate default 10% (CBP audit data)</li>
+        <li>CF-28 response cost = 3 hrs × hourly rate</li>
+        <li>ISF penalty rate $5,000/violation (19 CFR § 113.63)</li>
+        <li>Processing time 50 min/entry (GSA benchmark)</li>
+        <li>65% of manual extraction time eliminated through automation</li>
+        <li>85% of total annual risk exposure reduced with Docxster</li>
+        <li>All sliders go to zero to model any scenario</li>
       </ul>
     </details>
   )
