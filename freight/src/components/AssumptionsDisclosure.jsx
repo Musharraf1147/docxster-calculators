@@ -19,6 +19,7 @@ export default function AssumptionsDisclosure() {
         <span>Assumptions used in this calculation</span>
       </summary>
       <ul className="mt-md flex flex-col gap-xs text-xs text-text-weaker list-disc pl-lg">
+        <li>Carrier overbill rate 10% (industry estimate, range 5–15%)</li>
         <li>Docxster catches 65% of document handling time</li>
         <li>Docxster reduces dispute resolution time by 70%</li>
         <li>POD lag opportunity cost is calculated at 6% annualized</li>

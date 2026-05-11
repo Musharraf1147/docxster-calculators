@@ -16,15 +16,13 @@ function BreakdownGrid({ children }) {
 }
 
 function OperationsView({ results, inputs }) {
-  const netImpact = results.monthlyROI - inputs.subscriptionCost
-
   return (
     <>
       <HeroRow>
         <MetricCard
-          label="Margin you're losing today"
+          label="Monthly margin recovered"
           value={formatCurrency(results.overbillRecovered)}
-          caption="Monthly carrier overbilling that slips through"
+          caption="Overbilling caught by Docxster"
         />
         <MetricCard
           label="Monthly labor savings"
@@ -33,9 +31,9 @@ function OperationsView({ results, inputs }) {
         />
         <MetricCard
           emphasized
-          label="Net monthly impact"
-          value={formatCurrency(netImpact)}
-          caption="After Docxster subscription"
+          label="Monthly total ROI"
+          value={formatCurrency(results.monthlyROI)}
+          caption={`vs. ${formatCurrency(inputs.subscriptionCost)} subscription`}
         />
       </HeroRow>
 
@@ -70,8 +68,9 @@ function FinanceView({ results }) {
     <>
       <HeroRow>
         <MetricCard
-          label="Annual leakage you'd recover"
+          label="Annual overbilling leakage (current)"
           value={formatCurrency(results.totalOverbilling * 12)}
+          caption="Paid to carriers above contracted rate"
         />
         <MetricCard
           label="Working capital tied up in POD"
@@ -127,8 +126,8 @@ export default function ResultsPanel({ results, inputs }) {
         value={view}
         onChange={setView}
         options={[
-          { value: 'operations', label: 'Operations view' },
-          { value: 'finance', label: 'Finance view' },
+          { value: 'operations', label: 'Operational view' },
+          { value: 'finance', label: 'CFO / owner view' },
         ]}
       />
 
@@ -138,13 +137,29 @@ export default function ResultsPanel({ results, inputs }) {
         <FinanceView results={results} />
       )}
 
+      <CashFlowPanel value={results.cashFlowFreed} />
+
       <SummaryFooter
         paybackWeeks={results.paybackWeeks}
         roiMultiplier={results.roiMultiplier}
+        annualNet={results.annualNet}
       />
 
         <AssumptionsDisclosure />
       </div>
+    </div>
+  )
+}
+
+function CashFlowPanel({ value }) {
+  return (
+    <div className="bg-bg-primary border border-stroke-weak rounded-2xl p-xl shadow-xs flex items-center justify-between gap-lg flex-wrap">
+      <span className="text-sm font-medium text-text-weak max-w-[360px] leading-snug">
+        Working capital freed from POD lag reduction — billings that can go out faster when POD collection is automated.
+      </span>
+      <span className="text-xl tracking-[-0.4px] font-semibold tabular-nums text-text-strong whitespace-nowrap">
+        {formatCurrency(value)} / month
+      </span>
     </div>
   )
 }
