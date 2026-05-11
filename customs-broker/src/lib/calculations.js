@@ -20,8 +20,15 @@ export function calculateROI(inputs) {
     hsRate, hsDelta, ocean, isfRate, cost,
   } = inputs
 
-  const extractSaved  = (entries * timeMin / 60) * 0.65 * rate
-  const chaseSaved    = ftes * 160 * chasePct * rate
+  const teamMonthlyCost = ftes * 160 * rate
+  const extractSavedRaw = (entries * timeMin / 60) * 0.65 * rate
+  const chaseSavedRaw   = ftes * 160 * chasePct * rate
+  const laborRaw        = extractSavedRaw + chaseSavedRaw
+  const laborCapRatio   = (teamMonthlyCost > 0 && laborRaw > teamMonthlyCost)
+    ? teamMonthlyCost / laborRaw
+    : 1
+  const extractSaved  = extractSavedRaw * laborCapRatio
+  const chaseSaved    = chaseSavedRaw * laborCapRatio
   const validateSaved = entries * errRate * remediate
   const hsSaved       = entries * hsRate * hsDelta
 

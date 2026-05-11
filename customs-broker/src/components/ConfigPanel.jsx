@@ -22,7 +22,7 @@ export default function ConfigPanel({ inputs, onChange }) {
           label="Monthly entry volume"
           value={inputs.entries}
           min={0}
-          max={5000}
+          max={12000}
           step={50}
           onChange={set('entries')}
           formatValue={(v) => v.toLocaleString()}
